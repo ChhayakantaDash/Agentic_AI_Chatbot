@@ -23,13 +23,27 @@ class LoadStreamlitUI:
             if self.user_controls["selected_llm"] == 'Groq':
                 # Model selection
                 model_options = self.config.get_groq_model_options()
-                self.user_controls["selected_groq_model"] = st.selectbox("Select Model", model_options)
-                self.user_controls["GROQ_API_KEY"] = st.session_state["GROQ_API_KEY"]=st.text_input("API Key",type="password")
+                self.user_controls["selected_groq_model"] = st.selectbox(
+                    "Select Model", model_options, key="groq_model_select"
+                )
+                self.user_controls["GROQ_API_KEY"] = st.session_state["GROQ_API_KEY"] = st.text_input(
+                    "GROQ API Key", type="password", key="groq_api_key"
+                )
                 # Validate API key
                 if not self.user_controls["GROQ_API_KEY"]:
                     st.warning("⚠️ Please enter your GROQ API key to proceed. Don't have? refer : https://console.groq.com/keys ")
 
-            ## USecase selection
-            self.user_controls["selected_usecase"]=st.selectbox("Select Usecases",usecase_options)
+            ## Usecase selection
+            self.user_controls["selected_usecase"] = st.selectbox(
+                "Select Usecases", usecase_options, key="usecase_select"
+            )
+
+            if self.user_controls["selected_usecase"] == "Chatbot with Web":
+                os.environ["TAVILY_API_KEY"]=self.user_controls["TAVILY_API_KEY"] = st.session_state["TAVILY_API_KEY"] = st.text_input(
+                    "Tavily API Key", type="password", key="tavily_api_key"
+                )
+                # validate API key
+                if not self.user_controls["TAVILY_API_KEY"]:
+                    st.warning("⚠️ Please enter your Tavily API key to proceed. Don't have? refer : https://tavily.com/keys ")
 
         return self.user_controls
